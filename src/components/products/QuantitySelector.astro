@@ -1,0 +1,42 @@
+---
+const initialQuantity = 1;
+---
+
+<div class="flex" id="quantity-selector">
+  <!-- Botón para disminuir -->
+  <button id="decrease-btn">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      width="30"
+      height="30"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M20 12H4"></path>
+    </svg>
+  </button>
+  <!-- Visualizador de cantidad -->
+  <span id="quantity-display" class="quantity-display">{initialQuantity}</span>
+  <!-- Botón para aumentar -->
+  <button id="increase-btn">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      width="30"
+      height="30"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 4v16m8-8H4"></path>
+    </svg>
+  </button>
+</div>

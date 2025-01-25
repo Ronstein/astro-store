@@ -1,0 +1,91 @@
+---
+import { generatePaginationNumbers } from "@/utils";
+
+interface Props {
+  totalPages: number;
+}
+const { totalPages } = Astro.props;
+
+const url = Astro.url;
+const pageParam = Number(url.searchParams.get("page") ?? 1);
+const currentPage = Math.max(
+  pageParam > totalPages ? totalPages : pageParam,
+  1
+);
+
+const path = url.pathname;
+
+const allPages = generatePaginationNumbers(currentPage, totalPages);
+
+const createPageUrl = (pageNumber: number | string) => {
+  const params = new URLSearchParams(url.searchParams);
+  if (pageNumber === "...") {
+    return `${path}?${params.toString()}`;
+  }
+  if (+pageNumber <= 0) {
+    return `${path}`; // href="/";
+  }
+  if (+pageNumber > totalPages) {
+    return `${path}?${params.toString()}`; //cuando no hay mas paginas
+  }
+  params.set("page", pageNumber.toString());
+  return `${path}?${params.toString()}`;
+};
+---
+
+<div class="flex text-center justify-center mt-10 mb-32">
+  <nav aria-label="Page navigation example">
+    <ul class="flex list-style-none">
+      <li class="page-item">
+        <a
+          class="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
+          href={createPageUrl(currentPage - 1)}
+        >
+          Anterior
+        </a>
+      </li>
+
+      {
+        allPages.map((page, index) => (
+          <li class="page-item" data-index={`page-${index}`}>
+            <a
+              class:list={[
+                "page-link relative block m-0.5 py-1.5 px-3 border-0 outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none",
+                page === currentPage &&
+                  "bg-blue-600 shadow-sm text-white hover:text-white hover:bg-blue-700",
+              ]}
+              href={createPageUrl(page)}
+            >
+              {page}
+            </a>
+          </li>
+        ))
+      }
+
+      <li class="page-item">
+        <a
+          class="page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-gray-800 hover:text-gray-800 hover:bg-gray-200 focus:shadow-none"
+          href={createPageUrl(currentPage + 1)}
+        >
+          Siguiente
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<!-- <div class="flex justify-between my-32">
+  <a class="button" href={`${path}?page=${Math.max(currentPage - 1, 1)}`}>
+    Anteriores
+  </a>
+  <span>Página {pageParam} de {totalPages} </span>
+  <a
+    class="button"
+    href={`${path}?page=${Math.min(currentPage + 1, totalPages)}`}>Siguentes</a
+  >
+</div>
+
+<style>
+  .button {
+    @apply p-2 bg-blue-500 text-white rounded;
+  }
+</style> -->
